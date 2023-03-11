@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Students</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <style>
+      /* Styles for the dashboard page */
+      .b{
+        display: inline-flex;
+      }
+      .b2-btn{
+        margin-left: 550px ;
+      }
+      .gre{
+        color:grey;
+      }
+      th {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+td{  border-spacing: 100px;
+  border: 1px solid grey;
+}
+
+th {
+  background-color: rgb(237, 120, 237);
+}
+    </style>
+  </head>
+  <body onload="setup()">
+    <h1>Students</h1>
+    <div class="b">
+    <h7 class="gre">list of all students in database</h7>
+    
+    <!-- Import form -->
+    
+      
+    <form id='formid' action="form.php" method="POST" enctype="multipart/form-data"> 
+       <input id='fileid' type='file' hidden/>
+    <input id='buttonid' class=" b2-btn" type='button' value='Import Students' />
+</form>
+    
+    <!-- Export button -->
+    <button class="b2-btn b2-black">Export as CSV</button>
+  </div>
+  <table style="width:100%">
+  <tr>
+    <th>Name </th>
+    <th>Roll No</th>
+    <th>Address</th>
+    <th>Institute</th>
+    <th>Course</th>
+    
+  </tr>
+  <tr>
+    <td>Aarav </td>
+    <td> 1962001</td>
+    <td> 10/1, Main Street, Gandhi Nagar, Bangalore - 560008, Karnataka</td>
+    <td> LMN Institute of Technology</td>
+    <td>Bachelors of Technology </td>
+    
+  </tr>
+  <tr>
+    <td>Dhruv </td>
+    <td>1473502 </td>
+    <td>Door No. 12-2-417/A, Bank Colony Road, Ruknuddin Bagh, Hyderabad - 500032, Telangana </td>
+    <td>DEF Management Institute </td>
+    <td>Masters of Business Administration </td>
+    
+  </tr>
+  <tr>
+    <td>Sahil </td>
+    <td> 1762503</td>
+    <td> H.No. 8-2-123/456, Sri Nagar Colony, Road No. 1, Banjara Hills, Hyderabad - 500034, Telangana</td>
+    <td>MNO Medical College </td>
+    <td> Bachelor of Unani Medicine and Surgery</td>
+  
+  </tr>
+  </table>
+    <script>
+      // Function to convert CSV to JSON
+      function csvToJson(csv) {
+        // Code to convert CSV to JSON
+        
+      }
+      
+      // Import form submit event listener
+      document.getElementById("import-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
+        
+        // Get CSV file from input element
+        const file = document.getElementById("csv-file").files[0];
+        
+        // Read CSV file as text
+        const reader = new FileReader();
+        reader.readAsText(file);
+        
+        // Handle file read success
+        reader.onload = function(event) {
+          const csv = event.target.result;
+          const jsonData = csvToJson(csv); // Convert CSV to JSON
+          localStorage.setItem("StudentData", JSON.stringify(jsonData)); // Save JSON data to local storage
+          alert("Import successful!");
+        };
+        
+        // Handle file read error
+        reader.onerror = function(event) {
+          alert("Error reading CSV file.");
+        };
+      });
+      
+      // Export button click event listener
+      document.getElementById("export-button").addEventListener("click", function() {
+        const jsonData = localStorage.getItem("StudentData");
+        if (jsonData) {
+          const blob = new Blob([jsonData], { type: "application/json" }); // Create JSON blob
+          const link = document.createElement("a");
+          link.download = "StudentData.json";
+          link.href = URL.createObjectURL(blob);
+          link.click();
+        } else {
+          alert("No data to export.");
+        }
+      });
+      function setup() {
+                document.getElementById('buttonid').addEventListener('click', openDialog);
+                function openDialog() {
+                    document.getElementById('fileid').click();
+                }
+                document.getElementById('fileid').addEventListener('change', submitForm);
+                function submitForm() {
+                    document.getElementById('formid').submit();
+                }
+            }
+    </script>
+  </body>
+</html>
